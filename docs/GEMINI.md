@@ -10,15 +10,18 @@ This project, "Gratitude," implements the obstacle detection and spatial interac
 - **Interaction**: Spatial positioning and monocular distance estimation for object localization.
 
 ## Architecture & Logic
-- **Safety Mode (Obstacle Detection)**: Continuous background monitoring of the path with a priority-based alert system (P1-P5).
-- **Interaction Mode (Object Search)**: Responds to specific queries (e.g., "Where is the apple?") by providing directional ("Left", "Right", "Front") and distance feedback.
-- **Coordinate Mapping**: Translates 2D image coordinates into 3D spatial directions relative to the user.
+- **Distributed Architecture**:
+  - **MaixCam (Edge Node)**: Performs high-speed YOLO11 detection and calculates spatial coordinates. Acts as a `Slave` using the standard binary protocol (TCP 5555).
+  - **Raspberry Pi (Central Controller)**: Orchestrates feedback and user interaction. Acts as a `Master`, parsing binary frames with CRC16 and providing TTS via `espeak`.
+- **Safety Mode (Obstacle Detection)**: Continuous background monitoring with priority alerts pushed to RPi.
+- **Interaction Mode (Object Search)**: RPi sends search commands; MaixCam responds with directional guidance.
 
 ## Key Files & Directory Structure
-- `main.py`: Project entry point. Orchestrates detection and interaction logic.
-- `gratitude/`: Core logic package.
-  - `config.py`: Centralized configuration for models, whitelists, priorities, and physical constants.
-  - `interactor.py`: Logic for spatial positioning, orientation calculation, and voice report formatting.
+- `main.py`: MaixCam entry point.
+- `gratitude/`: MaixCam core logic package.
+- `rpi_service/`: Raspberry Pi standalone project folder.
+  - `main.py`: RPi entry point (Master protocol logic).
+  - `README.md`: Deployment guide for RPi.
 - `docs/`: Technical documentation and project guidelines.
 - `models/`: Directory for `.kmodel` or `.mud` files.
 
