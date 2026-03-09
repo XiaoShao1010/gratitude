@@ -4,6 +4,10 @@ from maix import image
 MODEL_PATH = "/root/models/yolo11n_320.mud"
 FOCAL_LENGTH = 600  # 像素焦距
 
+# 新增：树莓派的 TCP Server 配置
+PI_IP = "192.168.233.2"  # 树莓派虚拟网卡的 IP
+PI_PORT = 8888           # 通信端口
+
 # 障碍物白名单与优先级
 OBSTACLE_WHITELIST = {
     "car": 1, "motorcycle": 1, "bus": 1, "truck": 1,
