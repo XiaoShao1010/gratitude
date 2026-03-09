@@ -31,3 +31,8 @@ REAL_HEIGHTS = {
     "bicycle": 1000, "motorcycle": 1000, "fire hydrant": 800,
     "apple": 80, "bottle": 250, "cup": 120, "chair": 900
 }
+
+# 阶段一：通信配置
+RPI_IP = "192.168.233.1"  # 树莓派虚拟网卡 IP
+RPI_PORT = 12345          # 通信端口
+DEVICE_ID = "MaixCam_01"
