@@ -1,0 +1,32 @@
+# Python 编译文件
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# 深度学习模型文件 (MaixCam & 树莓派)
+# 我们不上传庞大的权重文件，应手动部署或从模型仓库下载
+**/models/*.cvimodel
+**/models/*.mud
+**/models/*.pth
+**/models/*.bin
+**/models/*.onnx
+**/models/*.safetensors
+
+# 忽略 MiniMind 2 词表与配置文件夹内容
+pi_node/models/MiniMind2/*
+!pi_node/models/MiniMind2/.gitkeep
+
+# 操作系统与 IDE
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.log
+
+# 硬件测试缓存
+ip.txt
+test_result/

@@ -1,12 +1,14 @@
 from maix import image
 
 # 模型与硬件配置
-MODEL_PATH = "/root/models/yolo11n_320.mud"
+# 注意：在 MaixCam 端，我们将模型放在 cam_node/models/ 目录下，
+# 或者引用系统路径 /root/models/
+MODEL_PATH = "/root/models/yolo11n_320_int8.cvimodel"
 FOCAL_LENGTH = 600  # 像素焦距
 
-# 新增：树莓派的 TCP Server 配置
-PI_IP = "192.168.233.2"  # 树莓派虚拟网卡的 IP
-PI_PORT = 8888           # 通信端口
+# 虚拟网卡配置
+SERVER_IP = "192.168.233.1"
+SERVER_PORT = 12345
 
 # 障碍物白名单与优先级
 OBSTACLE_WHITELIST = {
@@ -31,8 +33,3 @@ REAL_HEIGHTS = {
     "bicycle": 1000, "motorcycle": 1000, "fire hydrant": 800,
     "apple": 80, "bottle": 250, "cup": 120, "chair": 900
 }
-
-# 阶段一：通信配置 (MaixCam 作为服务端)
-MAIX_CAM_IP = "192.168.233.1"  # MaixCam 的 usb0 网卡 IP
-MAIX_CAM_PORT = 5555           # 协议默认端口
-DEVICE_ID = "MaixCam_01"
