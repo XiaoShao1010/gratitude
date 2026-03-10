@@ -1,9 +1,9 @@
 import time
 from maix import app
-from cam_node.config import SERVER_IP, SERVER_PORT
-from cam_node.core.vision_detector import VisionDetector
-from cam_node.core.network_server import NetworkServer
-from cam_node.core.interactor import Interactor
+from config import SERVER_IP, SERVER_PORT
+from core.vision_detector import VisionDetector
+from core.network_server import NetworkServer
+from core.interactor import Interactor
 
 def main():
     # 1. 初始化各模块

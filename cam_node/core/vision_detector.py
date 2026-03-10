@@ -1,5 +1,5 @@
 from maix import nn, camera, display, app, image
-from cam_node.config import MODEL_PATH, OBSTACLE_WHITELIST, PRIORITY_COLORS
+from config import MODEL_PATH, OBSTACLE_WHITELIST, PRIORITY_COLORS
 
 class VisionDetector:
     def __init__(self):

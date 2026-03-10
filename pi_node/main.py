@@ -1,7 +1,7 @@
 import time
-from pi_node.core.network_client import NetworkClient
-from pi_node.core.audio_engine import AudioEngine
-from pi_node.core.llm_engine import LLMEngine
+from core.network_client import NetworkClient
+from core.audio_engine import AudioEngine
+from core.llm_engine import LLMEngine
 
 MAIX_CAM_IP = "192.168.233.1"
 MAIX_CAM_PORT = 12345

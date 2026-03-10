@@ -1,4 +1,4 @@
-from cam_node.config import REAL_HEIGHTS, FOCAL_LENGTH
+from config import REAL_HEIGHTS, FOCAL_LENGTH
 
 class Interactor:
     def __init__(self, detector):

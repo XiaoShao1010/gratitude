@@ -3,12 +3,12 @@ from maix import image
 # 模型与硬件配置
 # 注意：在 MaixCam 端，我们将模型放在 cam_node/models/ 目录下，
 # 或者引用系统路径 /root/models/
-MODEL_PATH = "/root/models/yolo11n_320_int8.cvimodel"
+MODEL_PATH = "/root/models/yolo11n_320.mud"
 FOCAL_LENGTH = 600  # 像素焦距
 
 # 虚拟网卡配置
-SERVER_IP = "192.168.233.1"
-SERVER_PORT = 12345
+SERVER_IP = "0.0.0.0"  # 修改：监听所有网卡，避免 IP 段不一致导致连不上
+SERVER_PORT = 8080     # 修改：与树莓派请求的端口保持一致
 
 # 障碍物白名单与优先级
 OBSTACLE_WHITELIST = {
