@@ -3,49 +3,41 @@ from core.network_client import NetworkClient
 from core.audio_engine import AudioEngine
 from core.llm_engine import LLMEngine
 
-MAIX_CAM_IP = "192.168.233.1"
-MAIX_CAM_PORT = 12345
+# ✅ 修正 1：换成真实打通的 IP 和端口
+MAIX_CAM_IP = "10.43.210.1" 
+MAIX_CAM_PORT = 8080
 LLM_MODEL_PATH = "./models/intent_brain_26m_512.pth"
 
 def main():
-    # 1. 初始化引擎
     audio = AudioEngine()
     llm = LLMEngine(LLM_MODEL_PATH)
     network = NetworkClient(MAIX_CAM_IP, MAIX_CAM_PORT)
 
-    # 2. 定义收到视觉警报时的回调函数
     def on_warning(obj, dist):
-        if dist < 2.5: # 距离阈值判定
+        if dist < 2.5:
             msg = f"注意，前方{dist}米有{obj}"
             audio.speak(msg)
 
     network.warning_callback = on_warning
-    
-    # 3. 启动后台通讯
     network.connect()
 
-    print("[Raspberry Pi Node] Started. Listening for voice commands...")
+    print("\n[Raspberry Pi Node] Started. Listening for voice commands...")
     
     try:
         while True:
-            # 模拟语音监听过程 (此处将来接 ASR)
-            # user_text = audio.listen()
-            user_text = input(">> 用户语音输入模拟: ").strip() # 临时使用终端输入模拟
+            user_text = input("\n>> 用户语音输入模拟: ").strip()
             
             if user_text:
-                # 4. 意图识别 (LLM 推理)
-                intent = llm.get_intent(user_text)
-                print(f"[LLM] Detected Intent: {intent}")
+                # ✅ 修正 2：调用真实大模型，直接拿到双重结果
+                intent, target = llm.parse_command(user_text)
                 
-                if intent == "search":
-                    # 5. 提取并下发搜索指令至 MaixCam
-                    target = llm.extract_object(user_text)
-                    if target:
-                        network.send_search(target)
-                        audio.speak(f"好的，正在为您寻找{target}")
-                
-                elif intent == "describe":
-                    audio.speak("前方视野内有行人和车辆，请小心行走")
+                if intent == "find_object" and target and target != "null":
+                    audio.speak(f"好的，正在为您寻找{target}")
+                    network.send_search(target)
+                elif intent == "chat":
+                    audio.speak("我在这里，随时听候您的吩咐。")
+                else:
+                    audio.speak("没听清具体目标，能再说一次吗？")
 
             time.sleep(0.1)
 
