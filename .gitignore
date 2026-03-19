@@ -17,8 +17,9 @@ ENV/
 **/models/*.safetensors
 
 # 忽略 MiniMind 2 词表与配置文件夹内容
-pi_node/models/MiniMind2/*
-!pi_node/models/MiniMind2/.gitkeep
+pi_node/models/MiniMind2
+# pi_node/models/MiniMind2/*
+# !pi_node/models/MiniMind2/.gitkeep
 
 # 操作系统与 IDE
 .DS_Store
@@ -30,3 +31,4 @@ pi_node/models/MiniMind2/*
 # 硬件测试缓存
 ip.txt
 test_result/
+pi_node/models/MiniMind2
