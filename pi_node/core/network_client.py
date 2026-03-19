@@ -44,9 +44,16 @@ class NetworkClient:
             pass
 
     def send_search(self, object_name):
-        """下发搜索指令"""
         if self.client_sock:
             payload = {"type": "search", "object": object_name}
+            try:
+                self.client_sock.sendall((json.dumps(payload) + "\n").encode('utf-8'))
+            except:
+                self.client_sock = None
+
+    def send_mode(self, mode: str):
+        if self.client_sock:
+            payload = {"type": "mode", "mode": mode}
             try:
                 self.client_sock.sendall((json.dumps(payload) + "\n").encode('utf-8'))
             except:

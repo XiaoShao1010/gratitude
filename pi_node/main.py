@@ -2,9 +2,12 @@ import time
 from core.network_client import NetworkClient
 from core.audio_engine import AudioEngine
 from core.llm_engine import LLMEngine
+from core.phone_comm import PhoneComm
+from core.navigator import Navigator
 
-# ✅ 修正 1：换成真实打通的 IP 和端口
-MAIX_CAM_IP = "10.43.210.1" 
+# 蓝牙配置：手机蓝牙名称（首次配对后使用）
+PHONE_NAME = "BlindNav-Phone"
+MAIX_CAM_IP = "10.43.210.1"
 MAIX_CAM_PORT = 8080
 LLM_MODEL_PATH = "./models/intent_brain_26m_512.pth"
 
@@ -12,6 +15,8 @@ def main():
     audio = AudioEngine()
     llm = LLMEngine(LLM_MODEL_PATH)
     network = NetworkClient(MAIX_CAM_IP, MAIX_CAM_PORT)
+    phone = PhoneComm(PHONE_NAME)
+    navigator = Navigator(llm, phone, network, audio)
 
     def on_warning(obj, dist):
         if dist < 2.5:
@@ -20,6 +25,8 @@ def main():
 
     network.warning_callback = on_warning
     network.connect()
+    phone.connect()
+    navigator.listen_phone_status()
 
     print("\n[Raspberry Pi Node] Started. Listening for voice commands...")
     
@@ -28,10 +35,13 @@ def main():
             user_text = input("\n>> 用户语音输入模拟: ").strip()
             
             if user_text:
-                # ✅ 修正 2：调用真实大模型，直接拿到双重结果
-                intent, target = llm.parse_command(user_text)
+                result = navigator.extract_intent(user_text)
+                intent = result["intent"]
+                target = result["target"]
                 
-                if intent == "find_object" and target and target != "null":
+                if intent == "navigate" and target and target != "null":
+                    navigator.send_nav_request_to_phone(target)
+                elif intent == "find_object" and target and target != "null":
                     audio.speak(f"好的，正在为您寻找{target}")
                     network.send_search(target)
                 elif intent == "chat":
@@ -45,6 +55,7 @@ def main():
         pass
     finally:
         network.close()
+        phone.close()
         print("[Raspberry Pi Node] Stopped.")
 
 if __name__ == "__main__":
