@@ -30,7 +30,7 @@ pi_node/models/MiniMind2
 phone_agent/.gradle/
 phone_agent/build/
 phone_agent/**/build/
+phone_agent/local.properties
 # 硬件测试缓存
 ip.txt
 test_result/
-pi_node/models/MiniMind2
