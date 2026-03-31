@@ -5,9 +5,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.os.BluetoothAdapter;
-import android.os.BluetoothServerSocket;
-import android.os.BluetoothSocket;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
@@ -23,6 +20,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.UUID;
+
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothServerSocket;
+import android.bluetooth.BluetoothSocket;
+import android.app.Notification;
 
 public class SocketServerService extends Service {
     private static final String TAG = "BtServer";
@@ -86,16 +88,7 @@ public class SocketServerService extends Service {
             if ("START_NAV".equals(action)) {
                 String target = req.getString("target");
                 updateNotification("正在导航至: " + target);
-                naviManager.geocodeAndNavigate(target, new GaodeNaviManager.NaviCallback() {
-                    @Override
-                    public void onNaviStatus(String status, String event, int distance) {
-                        sendResponse(status, event, distance);
-                    }
-                    @Override
-                    public void onArrived() {
-                        sendArrived();
-                    }
-                });
+                naviManager.startNavigationTo(target, "杭州");
             }
         } catch (Exception e) {
             Log.e(TAG, "Handle request error", e);
@@ -103,20 +96,24 @@ public class SocketServerService extends Service {
     }
 
     private void sendResponse(String status, String event, int distance) {
-        if (out != null) {
-            JSONObject resp = new JSONObject();
+        JSONObject resp = new JSONObject();
+        try {
             resp.put("status", status);
             resp.put("event", event);
             resp.put("distance", distance);
-            out.println(resp.toString());
+            // 如果下面还有 send(resp.toString()) 相关的代码，也一起包在这个 try 里面
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void sendArrived() {
-        if (out != null) {
-            JSONObject resp = new JSONObject();
+        JSONObject resp = new JSONObject();
+        try {
             resp.put("status", "ARRIVED");
-            out.println(resp.toString());
+            // 同理，发送数据的代码也包进来
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

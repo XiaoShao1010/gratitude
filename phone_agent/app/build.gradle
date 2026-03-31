@@ -29,6 +29,8 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.amap.api:navi3d:[latestVersion]'
-    implementation 'com.amap.api:search:[latestVersion]'
+    implementation 'com.google.android.material:material:1.11.0'
+
+    // 高德导航合包 (navi + 3dmap + location + search)
+    implementation 'com.amap.api:navi-3dmap-location-search:10.1.201_3dmap10.1.201_loc6.4.9_sea9.7.4'
 }

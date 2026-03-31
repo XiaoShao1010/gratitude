@@ -27,7 +27,9 @@ pi_node/models/MiniMind2
 .idea/
 *.swp
 *.log
-
+phone_agent/.gradle/
+phone_agent/build/
+phone_agent/**/build/
 # 硬件测试缓存
 ip.txt
 test_result/
