@@ -89,21 +89,55 @@ public class SocketServerService extends Service {
                 String target = req.getString("target");
                 updateNotification("正在导航至: " + target);
                 naviManager.startNavigationTo(target, "杭州");
+            } else if ("GET_LOCATION".equals(action)) {
+                updateNotification("正在查询当前位置...");
+                naviManager.queryCurrentLocation(new GaodeNaviManager.LocationCallback() {
+                    @Override
+                    public void onLocationSuccess(GaodeNaviManager.LocationSnapshot locationSnapshot) {
+                        JSONObject resp = new JSONObject();
+                        try {
+                            resp.put("status", "OK");
+                            resp.put("event", "CURRENT_LOCATION");
+                            resp.put("latitude", locationSnapshot.getLatitude());
+                            resp.put("longitude", locationSnapshot.getLongitude());
+                            resp.put("address", locationSnapshot.getAddress());
+                            resp.put("city", locationSnapshot.getCity());
+                            resp.put("provider", locationSnapshot.getProvider());
+                            resp.put("detail", locationSnapshot.getDetail());
+                            sendResponse(resp);
+                            updateNotification("当前位置已返回");
+                        } catch (Exception e) {
+                            Log.e(TAG, "Build location response error", e);
+                        }
+                    }
+
+                    @Override
+                    public void onLocationFailure(String reason) {
+                        JSONObject resp = new JSONObject();
+                        try {
+                            resp.put("status", "ERROR");
+                            resp.put("event", "CURRENT_LOCATION");
+                            resp.put("reason", reason);
+                            sendResponse(resp);
+                            updateNotification("当前位置查询失败");
+                        } catch (Exception e) {
+                            Log.e(TAG, "Build location error response error", e);
+                        }
+                    }
+                });
             }
         } catch (Exception e) {
             Log.e(TAG, "Handle request error", e);
         }
     }
 
-    private void sendResponse(String status, String event, int distance) {
-        JSONObject resp = new JSONObject();
+    private void sendResponse(JSONObject response) {
         try {
-            resp.put("status", status);
-            resp.put("event", event);
-            resp.put("distance", distance);
-            // 如果下面还有 send(resp.toString()) 相关的代码，也一起包在这个 try 里面
+            if (out != null) {
+                out.println(response.toString());
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Send response error", e);
         }
     }
 
@@ -112,6 +146,7 @@ public class SocketServerService extends Service {
         try {
             resp.put("status", "ARRIVED");
             // 同理，发送数据的代码也包进来
+            sendResponse(resp);
         } catch (Exception e) {
             e.printStackTrace();
         }
