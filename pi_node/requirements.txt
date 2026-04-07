@@ -1,1 +1,3 @@
-pybluez
+numpy
+torch
+transformers

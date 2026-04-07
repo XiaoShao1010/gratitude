@@ -34,3 +34,6 @@ phone_agent/local.properties
 # 硬件测试缓存
 ip.txt
 test_result/
+
+
+AMap_Android_Navi_SDK_All/

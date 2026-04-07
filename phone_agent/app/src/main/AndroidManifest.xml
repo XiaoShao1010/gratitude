@@ -16,6 +16,7 @@
     <uses-feature android:name="android.hardware.bluetooth" android:required="true" />
 
     <application
+        android:name=".BlindNavApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -38,6 +39,11 @@
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".NaviTestActivity"
+            android:exported="true"
+            android:label="导航测试" />
 
         <service
             android:name=".navi.SocketServerService"

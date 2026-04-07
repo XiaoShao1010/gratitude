@@ -11,6 +11,7 @@ class NetworkServer:
         self.sock = None
         self.conn = None
         self.target_to_find = ""
+        self.current_mode = "normal"  # normal / turn_ahead / arrived
         self.running = True
 
     def start(self):
@@ -37,6 +38,9 @@ class NetworkServer:
                         if msg.get("type") == "search":
                             self.target_to_find = msg.get("object", "")
                             print(f"[Network] Command received: search {self.target_to_find}")
+                        elif msg.get("type") == "mode":
+                            self.current_mode = msg.get("mode", "normal")
+                            print(f"[Network] Mode switched to: {self.current_mode}")
                 except (socket.timeout, BlockingIOError):
                     continue
                 except Exception as e:
