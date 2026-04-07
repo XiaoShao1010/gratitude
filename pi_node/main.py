@@ -2,7 +2,7 @@ import time
 from core.network_client import NetworkClient
 from core.audio_engine import AudioEngine
 from core.llm_engine import LLMEngine
-from core.phone_comm import PhoneComm
+from core.phone_bridge import PhoneBridge
 from core.navigator import Navigator
 
 # 蓝牙配置：对端手机蓝牙名称（仅用于日志提示）
@@ -15,7 +15,7 @@ def main():
     audio = AudioEngine()
     llm = LLMEngine(LLM_MODEL_PATH)
     network = NetworkClient(MAIX_CAM_IP, MAIX_CAM_PORT)
-    phone = PhoneComm(PHONE_BT_NAME)
+    phone = PhoneBridge(PHONE_BT_NAME)
     navigator = Navigator(llm, phone, network, audio)
 
     def on_warning(obj, dist):

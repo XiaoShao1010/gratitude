@@ -4,6 +4,7 @@ import socket
 import subprocess
 import threading
 import time
+import uuid
 
 try:
     import bluetooth as pybluez
@@ -11,6 +12,7 @@ except Exception:
     pybluez = None
 
 BT_UUID = "00001101-0000-1000-8000-00805F9B34FB"
+          #00001101-0000-1000-8000-00805F9B34FB
 SERVICE_NAME = "BlindNavPi"
 RFCOMM_CHANNEL = 1
 
@@ -38,6 +40,8 @@ class PhoneComm:
         self.service_registered = False
         self.nav_status_callback = None
         self.arrived_callback = None
+        self.location_callback = None
+        self.message_callback = None
         self._connect_lock = threading.Lock()
 
     def connect(self):
@@ -55,7 +59,8 @@ class PhoneComm:
                 with self._connect_lock:
                     self._close_client_locked()
                     self.client_sock = client_sock
-                    self.client_file = client_sock.makefile('r', encoding='utf-8')
+                    # self.client_file = client_sock.makefile('r', encoding='utf-8')
+                    self.client_file = client_sock.makefile('r')
 
                 print(f"[BT] Connected from {client_info[0]}:{client_info[1]}")
                 self._read_loop()
@@ -111,6 +116,21 @@ class PhoneComm:
         if self.service_registered:
             return
 
+        if pybluez is not None and hasattr(pybluez, "advertise_service"):
+            try:
+                pybluez.advertise_service(
+                    self.server_sock,
+                    SERVICE_NAME,
+                    service_id=uuid.UUID(BT_UUID),
+                    service_classes=[uuid.UUID(BT_UUID), pybluez.SERIAL_PORT_CLASS],
+                    profiles=[pybluez.SERIAL_PORT_PROFILE],
+                )
+                self.service_registered = True
+                print(f"[BT] PyBluez service advertised on channel {RFCOMM_CHANNEL}")
+                return
+            except Exception as e:
+                print(f"[BT] PyBluez service advertisement failed: {e}")
+
         if shutil.which("sdptool") is None:
             print("[BT] sdptool not found; Android UUID discovery may fail")
             return
@@ -141,21 +161,50 @@ class PhoneComm:
     def _handle_response(self, line):
         try:
             data = json.loads(line)
+            if self.message_callback:
+                try:
+                    self.message_callback(data)
+                except Exception:
+                    pass
+
             status = data.get("status")
 
             if status == "ARRIVED":
                 if self.arrived_callback:
-                    self.arrived_callback()
+                    try:
+                        self.arrived_callback()
+                    except Exception:
+                        pass
             elif status in ("NAV_ACTIVE", "NAV_PAUSED", "NAV_RESUMED"):
                 event = data.get("event", "")
                 distance = data.get("distance", 0)
                 if self.nav_status_callback:
-                    self.nav_status_callback(status, event, distance)
+                    try:
+                        self.nav_status_callback(status, event, distance)
+                    except Exception:
+                        pass
+            elif status in ("OK", "ERROR") and data.get("event") == "CURRENT_LOCATION":
+                if self.location_callback:
+                    try:
+                        self.location_callback(data)
+                    except Exception:
+                        pass
         except json.JSONDecodeError:
             pass
 
     def send_nav_request(self, destination: str) -> bool:
-        payload = {"action": "START_NAV", "target": destination}
+        return self.send_action("START_NAV", destination)
+
+    def send_stop_nav(self) -> bool:
+        return self.send_action("STOP_NAV")
+
+    def send_location_request(self) -> bool:
+        return self.send_action("GET_LOCATION")
+
+    def send_action(self, action: str, target: str = None) -> bool:
+        payload = {"action": action}
+        if target is not None:
+            payload["target"] = target
         return self._send_json(payload)
 
     def _send_json(self, payload: dict) -> bool:
