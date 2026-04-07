@@ -11,8 +11,17 @@ class LLMEngine:
         
         print(f"[LLM] ⏳ 正在唤醒 26M 意图大脑 ({model_path})...")
         self.tokenizer = AutoTokenizer.from_pretrained(self.tokenizer_path)
+        if self.tokenizer.pad_token_id is None and self.tokenizer.eos_token is not None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
         
-        config = MiniMindConfig(hidden_size=512, num_hidden_layers=8, vocab_size=self.tokenizer.vocab_size)
+        config = MiniMindConfig(
+            hidden_size=512,
+            num_hidden_layers=8,
+            num_attention_heads=8,
+            num_key_value_heads=2,
+            intermediate_size=1408,
+            vocab_size=self.tokenizer.vocab_size,
+        )
         self.model = MiniMindForCausalLM(config)
         
         self.model.load_state_dict(torch.load(model_path, map_location=self.device), strict=False)

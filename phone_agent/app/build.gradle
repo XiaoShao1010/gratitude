@@ -32,5 +32,25 @@ dependencies {
     implementation 'com.google.android.material:material:1.11.0'
 
     // 高德导航合包 (navi + 3dmap + location + search)
-    implementation 'com.amap.api:navi-3dmap-location-search:10.1.201_3dmap10.1.201_loc6.4.9_sea9.7.4'
+    implementation 'com.amap.api:navi-3dmap-location-search:11.1.000_3dmap11.1.000_loc11.1.000_sea9.7.4'
+    testImplementation 'com.amap.api:navi-3dmap-location-search:11.1.000_3dmap11.1.000_loc11.1.000_sea9.7.4'
+
+    // ===================== TEST DEPENDENCIES =====================
+    // JUnit 4 — unit testing framework
+    testImplementation 'junit:junit:4.13.2'
+
+    // Robolectric 4.11 — runs Android tests on JVM (no emulator needed)
+    testImplementation 'org.robolectric:robolectric:4.11.1'
+
+    // Mockito — mocking framework for test doubles
+    testImplementation 'org.mockito:mockito-core:5.2.0'
+
+    // AndroidX Test — Android testing utilities + JUnit 4 rules
+    testImplementation 'androidx.test:core:1.5.0'
+    testImplementation 'androidx.test:runner:1.5.2'
+    testImplementation 'androidx.test:rules:1.5.0'
+    testImplementation 'androidx.test.ext:junit:1.1.5'
+
+    // AssertJ — fluent assertions for tests
+    testImplementation 'org.assertj:assertj-core:3.24.2'
 }

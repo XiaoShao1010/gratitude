@@ -50,7 +50,7 @@
                     style="@style/BlindNav.HeaderChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/shell_state_online" />
+                    android:text="@string/bt_status_disconnected" />
 
                 <TextView
                     android:id="@+id/text_shell_location"

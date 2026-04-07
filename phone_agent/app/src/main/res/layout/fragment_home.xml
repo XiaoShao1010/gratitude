@@ -106,6 +106,14 @@
 
         </LinearLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_navi_test"
+            style="@style/BlindNav.ButtonSecondary"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/action_navi_test" />
+
         <com.google.android.material.card.MaterialCardView
             style="@style/BlindNav.Card.Warning"
             android:layout_width="match_parent"

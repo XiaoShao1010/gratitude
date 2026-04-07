@@ -2,11 +2,11 @@ import time
 from core.network_client import NetworkClient
 from core.audio_engine import AudioEngine
 from core.llm_engine import LLMEngine
-from core.phone_comm import PhoneComm
+from core.phone_bridge import PhoneBridge
 from core.navigator import Navigator
 
-# 蓝牙配置：手机蓝牙名称（首次配对后使用）
-PHONE_NAME = "BlindNav-Phone"
+# 蓝牙配置：对端手机蓝牙名称（仅用于日志提示）
+PHONE_BT_NAME = "BlindNav-Phone"
 MAIX_CAM_IP = "10.43.210.1"
 MAIX_CAM_PORT = 8080
 LLM_MODEL_PATH = "./models/intent_brain_26m_512.pth"
@@ -15,7 +15,7 @@ def main():
     audio = AudioEngine()
     llm = LLMEngine(LLM_MODEL_PATH)
     network = NetworkClient(MAIX_CAM_IP, MAIX_CAM_PORT)
-    phone = PhoneComm(PHONE_NAME)
+    phone = PhoneBridge(PHONE_BT_NAME)
     navigator = Navigator(llm, phone, network, audio)
 
     def on_warning(obj, dist):

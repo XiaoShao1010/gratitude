@@ -27,6 +27,8 @@ class Navigator:
         if sent:
             self.audio.speak(f"好的，正在为您导航至{destination}")
             self._nav_active = True
+        else:
+            self.audio.speak("蓝牙导航暂时不可用，请先确认手机与树莓派连接正常。")
         return sent
 
     def listen_phone_status(self):

@@ -9,6 +9,9 @@
     <string name="shell_state_online">在线</string>
     <string name="shell_state_location_ready">定位就绪</string>
     <string name="shell_state_profile">我的</string>
+    <string name="bt_status_disconnected">蓝牙未连接</string>
+    <string name="bt_status_connecting">蓝牙连接中</string>
+    <string name="bt_status_connected">蓝牙已连接</string>
     <string name="module_home_title">首页</string>
     <string name="module_map_title">地图</string>
     <string name="module_my_title">我的</string>
@@ -76,11 +79,12 @@
     <string name="action_stop_navigation">停止导航</string>
     <string name="action_reconnect">重连设备</string>
     <string name="action_voice_test">语音测试</string>
+    <string name="action_navi_test">导航测试</string>
     <string name="safety_notice_title">安全提醒</string>
     <string name="safety_notice_body">长按停止导航可触发紧急停止。请在空旷区域完成首次调试。</string>
     <string name="toast_navigation_started">已开始导航</string>
     <string name="toast_navigation_stopped">已停止导航</string>
     <string name="toast_reconnect_placeholder">正在重连设备（占位逻辑）</string>
     <string name="toast_voice_test_placeholder">语音播报测试成功（占位逻辑）</string>
-    <string name="amap_api_key"></string>
+    <string name="amap_api_key">24e11904cdaf664c148af49c4f120019</string>
 </resources>

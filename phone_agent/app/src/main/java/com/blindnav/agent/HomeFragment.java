@@ -1,6 +1,7 @@
 package com.blindnav.agent;
 
 import android.os.Bundle;
+import android.content.Intent;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,7 @@ public class HomeFragment extends Fragment {
         buttonPrimary = view.findViewById(R.id.button_primary);
         MaterialButton buttonReconnect = view.findViewById(R.id.button_reconnect);
         MaterialButton buttonVoiceTest = view.findViewById(R.id.button_voice_test);
+        MaterialButton buttonNaviTest = view.findViewById(R.id.button_navi_test);
 
         buttonPrimary.setOnClickListener(v -> {
             isNavigating = !isNavigating;
@@ -57,6 +59,11 @@ public class HomeFragment extends Fragment {
         buttonVoiceTest.setOnClickListener(v -> {
             v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
             Toast.makeText(requireContext(), getString(R.string.toast_voice_test_placeholder), Toast.LENGTH_SHORT).show();
+        });
+
+        buttonNaviTest.setOnClickListener(v -> {
+            v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            startActivity(new Intent(requireContext(), NaviTestActivity.class));
         });
 
         updatePrimaryState();

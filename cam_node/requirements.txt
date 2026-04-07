@@ -1,0 +1,2 @@
+# MaixCam 依赖 (MaixPy v3 系统预装)
+# maix (预装，无需 pip 安装)
